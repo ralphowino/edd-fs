@@ -1,0 +1,9 @@
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "contacts": {
+    "phone": "0701234567",
+    "website": "www.example.com",
+    "email": "johndoe@example.com"
+  }
+}
