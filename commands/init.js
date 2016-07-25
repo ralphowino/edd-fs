@@ -1,5 +1,5 @@
 var program = require('commander'),
-  io = require('../../io'),
+  io = require('../../eddie-io'),
   manager = require('../components/manager'),
   q = require('q'),
   fs = require('fs-plus');
