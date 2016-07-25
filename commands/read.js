@@ -24,8 +24,7 @@ function handle(path) {
   "use strict";
 
   if (path == undefined) {
-    console.error(new Error('Required argument `path` not provided'));
-    process.exit(1);
+    throw new Error('Required argument `path` not provided');
   }
 
   if (!fs.isFileSync(path)) {

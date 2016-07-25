@@ -1,5 +1,5 @@
 var program = require('commander'),
-  io = require('../../eddie-io'),
+  io = require('../../io'),
   manager = require('../components/manager'),
   q = require('q'),
   fs = require('fs-plus');
@@ -32,8 +32,7 @@ function handle() {
   } else {
     manager.init();
   }
-
-};
+}
 
 
 

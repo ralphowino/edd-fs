@@ -16,8 +16,7 @@ var resolveFileType = function (fileName) {
       return type;
     }
   }
-
-  console.error(new Error('The file is of an unsupported format'));
+  throw new Error('The file is of an unsupported format');
 };
 
 var rawRead = function (path) {
