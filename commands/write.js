@@ -1,6 +1,4 @@
 var program = require('commander'),
-  io = require('../../io'),
-  manager = require('../components/manager'),
   q = require('q'),
   fs = require('fs-plus'),
   reader = require('../components/reader'),

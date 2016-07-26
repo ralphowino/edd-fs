@@ -1,10 +1,18 @@
 {
   "name": "eddie-fs",
   "version": "1.0.0",
-  "description": "A Eddie module for reading and writing files",
+  "description": "A file system module for the Eddie Application",
   "main": "index.js",
+  "dependencies": {
+    "fs-plus": "^2.9.1",
+    "inquirer": "^1.1.2",
+    "js-yaml": "^3.6.1",
+    "lodash": "^4.14.0",
+    "prompt": "^1.0.0"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "eddie read"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -18,11 +26,5 @@
   "bugs": {
     "url": "https://github.com/ralphowino/eddie-fs/issues"
   },
-  "homepage": "https://github.com/ralphowino/eddie-fs#readme",
-  "dependencies": {
-    "fs-plus": "^2.9.1",
-    "inquirer": "^1.1.2",
-    "js-yaml": "^3.6.1",
-    "prompt": "^1.0.0"
-  }
+  "homepage": "https://github.com/ralphowino/eddie-fs#readme"
 }

@@ -2,7 +2,8 @@
 
 var fs = require('fs-plus'),
   q = require('q'),
-  yaml = require('js-yaml');
+  yaml = require('js-yaml'),
+  _ = require('lodash');
 
 var types = {
   json: ['json'],
@@ -12,7 +13,7 @@ var types = {
 var resolveFileType = function (fileName) {
   var ext = fileName.substr(fileName.lastIndexOf('.') + 1);
   for (var type in types) {
-    if (types[type].includes(ext)) {
+    if (_.includes(types[type], ext)) {
       return type;
     }
   }
@@ -32,7 +33,7 @@ var parse = {
   yaml: parseYaml
 };
 
-module.exports.read = function (path) {
+exports.read = function (path) {
   var type = resolveFileType(path);
   var defered = q.defer();
   fs.readFile(path, function (err, data) {
