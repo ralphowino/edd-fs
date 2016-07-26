@@ -1,7 +1,6 @@
 'use strict';
 
-var q = require('q'),
-  fs = require('fs-plus'),
+var fs = require('fs-plus'),
   yaml = require('js-yaml');
 
 var types = {
@@ -16,11 +15,10 @@ var resolveFileType = function (fileName) {
       return type;
     }
   }
-  throw new Error('The file is of an unsupported format');
+  return ext;
 };
 
 var rawRead = function (path) {
-  var reader = q.defer();
   return fs.readFileSync(path);
 };
 
@@ -39,7 +37,11 @@ var parse = {
 
 module.exports.read = function (path) {
   var type = resolveFileType(path);
-  return parse[type](rawRead(path));
+  var content = rawRead(path).toString();
+  if (typeof parse[type] == 'function') {
+    return parse[type](content);
+  }
+  return content;
 };
 
 exports = module.exports;
