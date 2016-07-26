@@ -1,0 +1,28 @@
+{
+  "name": "eddie-fs",
+  "version": "1.0.0",
+  "description": "A Eddie module for reading and writing files",
+  "main": "index.js",
+  "scripts": {
+    "test": "eddie read"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ralphowino/eddie-fs.git"
+  },
+  "keywords": [
+    "eddie"
+  ],
+  "author": "RalphOwino",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ralphowino/eddie-fs/issues"
+  },
+  "homepage": "https://github.com/ralphowino/eddie-fs#readme",
+  "dependencies": {
+    "fs-plus": "^2.9.1",
+    "inquirer": "^1.1.2",
+    "js-yaml": "^3.6.1",
+    "prompt": "^1.0.0"
+  }
+}

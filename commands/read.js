@@ -32,7 +32,13 @@ function handle(path) {
     process.exit(1);
   }
 
-  console.log(reader.read(path));
+  reader.read(path)
+    .then(function (data) {
+      console.log(data);
+    })
+    .catch(function (err) {
+      console.log(err ? err : '');
+    });
 }
 
 

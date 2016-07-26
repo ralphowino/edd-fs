@@ -1,17 +1,49 @@
 var q = require('q'),
+  inquirer = require('inquirer'),
+  path = require('path'),
   fs = require('fs-plus');
 
-module.exports.write = function (path, content) {
-  var deferred = q.defer();
-  //Todo: check if exists and follow overwrite instructions
-  fs.writeFile(path, content, undefined, function (err) {
-    "use strict";
+
+var writeFile = function (file_path, content) {
+  var defered = q.defer();
+  var dir = path.dirname(file_path);
+  if (!fs.existsSync(dir)) {
+    fs.mkdir(dir);
+  }
+
+  fs.writeFile(file_path, content, function (err) {
     if (err) {
-      return deferred.reject(err);
+      defered.reject(new Error(err));
+    } else {
+      defered.resolve();
     }
-    return deferred.fulfill();
   });
-  return deferred.promise;
+  return defered.promise;
+};
+
+var askToOverwrite = function () {
+  var question = {
+    type: "confirm",
+    name: "overwrite",
+    message: "The file already exists, do you want to overwrite it?",
+    default: false
+  };
+  return inquirer.prompt([question]);
+};
+
+module.exports.write = function (path, content) {
+  var defered = q.defer();
+  if (!fs.existsSync(path)) {
+    return writeFile(path, content);
+  }
+
+  return askToOverwrite().then(function (response) {
+    if (response.overwrite) {
+      return writeFile(path, content);
+    }
+    defered.reject();
+    return defered.promise;
+  });
 };
 
 module.exports.mkdir = function (path) {
@@ -26,7 +58,4 @@ module.exports.mkdir = function (path) {
     return deferred.fulfill();
   });
   return deferred.promise;
-}
-
-
-exports = module.exports;
+};
