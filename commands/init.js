@@ -1,5 +1,4 @@
 var program = require('commander'),
-  io = require('../../io'),
   manager = require('../components/manager'),
   q = require('q'),
   fs = require('fs-plus');
@@ -16,7 +15,7 @@ function init() {
     .description('Initialize a new eddie instance')
     .option('-f, --force', 'Force re-initialization if already existing')
     .action(command.handle);
-};
+}
 
 function handle() {
   "use strict";

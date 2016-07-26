@@ -1,9 +1,9 @@
 'use strict';
 
-var fs = require('fs-plus'),
-  q = require('q'),
-  yaml = require('js-yaml'),
-  _ = require('lodash');
+var fs = require('fs-plus');
+var  q = require('q');
+var  yaml = require('js-yaml');
+var  _ = require('lodash');
 
 var types = {
   json: ['json'],
@@ -43,7 +43,7 @@ exports.read = function (path) {
       if (typeof parse[type] == 'function') {
         defered.resolve(parse[type](data));
       } else {
-        defered.resolve(data);
+        defered.resolve(data.toString());
       }
     }
   });

@@ -29,11 +29,13 @@ function handle(path, content) {
   if (content == undefined) {
     throw new Error('Required argument `data` not provided');
   }
-  writer.write(path, content).then(function () {
-    console.log('Files written successfully');
-  }).catch(function (err) {
-    console.log(err ? err : '');
-  });
+  writer.write(path, content)
+    .then(function () {
+      console.log('Files written successfully');
+    })
+    .catch(function (err) {
+      console.log(err ? err : '');
+    });
 }
 
 

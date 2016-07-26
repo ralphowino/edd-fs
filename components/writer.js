@@ -8,7 +8,7 @@ var writeFile = function (file_path, content) {
   var defered = q.defer();
   var dir = path.dirname(file_path);
   if (!fs.existsSync(dir)) {
-    fs.mkdir(dir);
+    fs.makeTreeSync(dir);
   }
 
   fs.writeFile(file_path, content, function (err) {
@@ -49,7 +49,6 @@ module.exports.write = function (path, content) {
 module.exports.mkdir = function (path) {
   "use strict";
   var deferred = q.defer();
-  //Todo: check if exists and follow overwrite instructions
   fs.makeTree(path, function (err) {
     "use strict";
     if (err) {
