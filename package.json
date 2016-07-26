@@ -1,0 +1,23 @@
+{
+  "name": "eddie-fs",
+  "version": "0.1.0",
+  "description": "File system module built for the Eddie application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ralphowino/eddie-fs.git"
+  },
+  "keywords": [
+    "eddie",
+    "eddie-fs"
+  ],
+  "author": "Samuel Kubai <sam@ralphowino.com> (http://ralphowino.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ralphowino/eddie-fs/issues"
+  },
+  "homepage": "https://github.com/ralphowino/eddie-fs#readme"
+}

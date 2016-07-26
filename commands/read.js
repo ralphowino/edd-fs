@@ -4,6 +4,7 @@ var program = require('commander'),
   q = require('q'),
   fs = require('fs-plus'),
   reader = require('../components/reader');
+  loader = require('../components/loader');
 
 var command = {};
 command.init = init;
@@ -23,16 +24,18 @@ function init() {
 function handle(path) {
   "use strict";
 
-  if (path == undefined) {
-    throw new Error('Required argument `path` not provided');
-  }
+  // if (path == undefined) {
+  //   throw new Error('Required argument `path` not provided');
+  // }
+  //
+  // if (!fs.isFileSync(path)) {
+  //   console.error('ERROR: Argument `path` is not a valid file path');
+  //   process.exit(1);
+  // }
+  //
+  // console.log(reader.read(path));
+  console.log(loader.loadFile(path));
 
-  if (!fs.isFileSync(path)) {
-    console.error('ERROR: Argument `path` is not a valid file path');
-    process.exit(1);
-  }
-
-  console.log(reader.read(path));
 }
 
 

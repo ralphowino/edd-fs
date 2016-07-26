@@ -1,7 +1,8 @@
 'use strict';
 
 var fs = require('fs-plus'),
-  yaml = require('js-yaml');
+  yaml = require('js-yaml'),
+  _ = require('lodash');
 
 var types = {
   json: ['json'],
@@ -11,7 +12,7 @@ var types = {
 var resolveFileType = function (fileName) {
   var ext = fileName.substr(fileName.lastIndexOf('.') + 1);
   for (var type in types) {
-    if (types[type].includes(ext)) {
+    if (_.includes(types[type], ext)) {
       return type;
     }
   }
@@ -35,7 +36,7 @@ var parse = {
   yaml: readYaml
 };
 
-module.exports.read = function (path) {
+exports.read = function (path) {
   var type = resolveFileType(path);
   var content = rawRead(path).toString();
   if (typeof parse[type] == 'function') {
@@ -44,4 +45,4 @@ module.exports.read = function (path) {
   return content;
 };
 
-exports = module.exports;
+
