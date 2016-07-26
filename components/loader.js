@@ -27,6 +27,7 @@ exports.loadFile = function (path) {
 
     if (eddieFolder) {
         fileContent = readFile(eddieFolder + '/' + path);
+        console.log(fileContent);
         if(fileContent) {
             return buildResponse('local', eddieFolder + '/' + path, fileContent);
         }
@@ -93,6 +94,7 @@ function findFile(directory, targetFile) {
  * @returns {*}
  */
 function readFile(path) {
+    console.log(fs.existsSync(path));
     if (fs.existsSync(path)) {
         return reader.read(path);
     }
