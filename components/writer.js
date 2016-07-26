@@ -11,7 +11,7 @@ var writeFile = function (file_path, content) {
     fs.makeTreeSync(dir);
   }
 
-  fs.writeFile(file_path, content, function (err) {
+  fs.writeFile(file_path, content.toString(), function (err) {
     if (err) {
       defered.reject(new Error(err));
     } else {
