@@ -6,9 +6,15 @@ var fs = require('fs-plus');
 var reader = require('./reader');
 
 class Loader {
+  constructor() {
+    this.globalFolder = fs.getHomeDirectory() + '/.ed/';
+
+  }
+
   loadFile(path) {
-    return this.getRealPath(path).then(function (response) {
-      return this.readFile(response.path).then(function (content) {
+    return this.getRealPath(path).then((response)=> {
+      console.log(response);
+      return this.readFile(response.path).then((content)=> {
         response.content = content;
         return response;
       });
@@ -22,7 +28,8 @@ class Loader {
     return reader.read(path);
   }
 
-  getRealPath() {
+  getRealPath(path) {
+
     if (fs.isAbsolute(path)) {
       return q.resolve({
         type: 'absolute',
@@ -36,19 +43,15 @@ class Loader {
         path: localPath + '/' + path
       });
     }
-    let globalPath = this.getGlobalFolder();
-    if (globalPath && fs.exists(globalPath + '/' + path)) {
+    if (fs.exists(this.globalFolder + '/' + path)) {
       return q.resolve({
         type: 'local',
-        path: globalPath + '/' + path
+        path: this.globalFolder + '/' + path
       });
     }
     return q.reject(new Error('File not found'));
   }
 
-  getGlobalFolder() {
-    return fs.getHomeDirectory() + '/.ed/';
-  }
 
   getLocalFolder(targetFile, startingPoint, levels) {
     if (startingPoint) {
@@ -77,20 +80,6 @@ class Loader {
     return false;
   }
 }
-
-/**
- * Loads the file in the specified path from the closest .ed folder
- *
- * @param path
- * @returns {{source: *, path: *, content: *}} || null
- */
-exports.loadFile = function (path) {
-  var deferred = q.defer();
-  // Check if path is absolute and fetches the data if it is.
-
-
-  return deferred.promise;
-};
 
 module.exports = new Loader;
 
