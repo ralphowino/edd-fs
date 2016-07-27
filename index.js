@@ -3,6 +3,7 @@ var _ = require('lodash'),
   readCmd = require('./commands/read'),
   writeCmd = require('./commands/write'),
   writer = require('./components/writer'),
+  loader = require('./components/loader'),
   manager = require('./components/manager'),
   reader = require('./components/reader');
 
@@ -13,4 +14,4 @@ function init() {
   writeCmd.init();
 }
 
-exports = module.exports = _.merge(writer, reader, manager, {init: init});
+exports = module.exports = _.merge(writer, reader, manager,loader, {init: init});

@@ -34,7 +34,6 @@ function handle(path) {
   //   process.exit(1);
   // }
   //
-  // console.log(reader.read(path));
   loader.loadFile(path).then(function (response) {
     console.log(response);
   }, function (err) {
