@@ -1,5 +1,6 @@
 'use strict';
 
+var q = require('q');
 var fs = require('fs-plus');
 var reader = require('./../reader');
 var transverser = require('./../transversal/transverse');
@@ -11,12 +12,25 @@ var transverser = require('./../transversal/transverse');
  * @returns {*}
  */
 function readFile(path) {
-    if (fs.existsSync(path)) {
-        return reader.read(path);
-    }
+    var deferred = q.defer();
 
-    return false;
+    fs.stat(path, function (err, stat) {
+        if(err == null) {
+            reader.read(path).then(function (response) {
+                return deferred.resolve(response);
+            }, function (err) {
+                return deferred.reject(new Error(err));
+            });
+        } else if(err.code == 'ENOENT') {
+            return deferred.reject(new Error('File does not exist'));
+        } else {
+            return deferred.reject(new Error(err));
+        }
+    });
+
+    return deferred.promise;
 }
+
 
 /**
  * Reads a file from the local .eddie folder
@@ -26,9 +40,7 @@ function readFile(path) {
  */
 function readLocalFile(path)
 {
-    var fileContent = readFile(transverser.r_transverseFileSystem('.eddie') + '/' + path);
-
-    return fileContent ? fileContent : null;
+    return readFile(transverser.r_transverseFileSystem('.eddie') + '/' + path);
 }
 
 /**
@@ -39,9 +51,7 @@ function readLocalFile(path)
  */
 function readGlobalFile(path)
 {
-    var fileContent = readFile(fs.getHomeDirectory() + '/.eddie/' + path);
-
-    return fileContent ? fileContent : null;
+    return readFile(fs.getHomeDirectory() + '/.eddie/' + path);
 }
 
 /**

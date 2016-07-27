@@ -1,5 +1,6 @@
 'use strict';
 
+var q = require('q');
 var _ = require('lodash');
 var fs = require('fs-plus');
 var reader = require('./reader');
@@ -11,34 +12,36 @@ var reader = require('./reader');
  * @returns {{source: *, path: *, content: *}} || null
  */
 exports.loadFile = function (path) {
-    var fileContent;
+    var deferred = q.defer();
 
-    //Check if path is absolute
+    // Check if path is absolute and fetches the data if it is.
     if(fs.isAbsolute(path)) {
-        fileContent = readFile(path);
-        if(fileContent) {
-            return buildResponse('absolute', path, fileContent);
-        }
-        return null;
+        readFile(path).then(function (fileContent) {
+            return deferred.resolve(buildResponse('absolute', path, fileContent));
+        }, function (err) {
+            return deferred.reject(err);
+        });
     }
 
-    // Transverse file system for the .eddie folder
+    // Check for the local .eddie folder and fetches the file if it exists.
     var eddieFolder = r_transverseFileSystem('.eddie');
 
-    if (eddieFolder) {
-        fileContent = readFile(eddieFolder + '/' + path);
-        console.log(fileContent);
-        if(fileContent) {
-            return buildResponse('local', eddieFolder + '/' + path, fileContent);
-        }
+    if (Boolean(eddieFolder)) {
+        readFile(eddieFolder + '/' + path).then(function (fileContent) {
+            return deferred.resolve(buildResponse('local', eddieFolder + '/' + path, fileContent));
+        });
+    } else {
+        // Fetch the global file and returns the data for the global file.
+        var globalFolder = fs.getHomeDirectory() + '/.eddie/';
+
+        readFile(globalFolder + path).then(function (fileContent) {
+            return deferred.resolve(buildResponse('global', globalFolder + path, fileContent));
+        }, function (err) {
+            return deferred.reject(err);
+        });
     }
 
-    fileContent = readFile(fs.getHomeDirectory() + '/.eddie/' + path);
-    if(fileContent) {
-        return buildResponse('global', fs.getHomeDirectory() + '/.eddie/' + path, fileContent);
-    }
-
-    return null;
+    return deferred.promise;
 };
 
 /**
@@ -94,12 +97,23 @@ function findFile(directory, targetFile) {
  * @returns {*}
  */
 function readFile(path) {
-    console.log(fs.existsSync(path));
-    if (fs.existsSync(path)) {
-        return reader.read(path);
-    }
+    var deferred = q.defer();
 
-    return false;
+    fs.stat(path, function (err, stat) {
+        if(err == null) {
+            reader.read(path).then(function (response) {
+                return deferred.resolve(response);
+            }, function (err) {
+                return deferred.reject(new Error(err));
+            });
+        } else if(err.code == 'ENOENT') {
+            return deferred.reject(new Error('File does not exist'));
+        } else {
+            return deferred.reject(new Error(err));
+        }
+    });
+
+    return deferred.promise;
 }
 
 /**

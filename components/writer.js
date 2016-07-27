@@ -11,7 +11,12 @@ var writeFile = function (file_path, content) {
     fs.makeTreeSync(dir);
   }
 
-  fs.writeFile(file_path, content.toString(), function (err) {
+  // Checks if the content is JSON and stringifyies it
+  if(IsJsonString(content)){
+    content = JSON.stringify(content);
+  }
+
+  fs.writeFile(file_path, content, function (err) {
     if (err) {
       defered.reject(new Error(err));
     } else {
@@ -20,6 +25,16 @@ var writeFile = function (file_path, content) {
   });
   return defered.promise;
 };
+
+
+function IsJsonString(content) {
+  try {
+    JSON.stringify(content);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
 
 var askToOverwrite = function () {
   var question = {

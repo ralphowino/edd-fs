@@ -33,12 +33,16 @@ function handle(path) {
   // }
   //
   // console.log(reader.read(path));
-  // console.log(loader.loadFile(path));
-  copy.copyFile(path).then(function (response) {
+  loader.loadFile(path).then(function (response) {
     console.log(response);
   }, function (err) {
-    console.log(err)
+    console.log(err);
   });
+  // copy.copyFile(path).then(function (response) {
+  //   console.log(response);
+  // }, function (err) {
+  //   console.log(err)
+  // });
 }
 
 
