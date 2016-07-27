@@ -6,84 +6,133 @@ var fs = require('fs-plus');
 var reader = require('./reader');
 
 class Loader {
-  constructor() {
-    this.globalFolder = fs.getHomeDirectory() + '/.ed/';
-  }
-
-  loadFile(path) {
-    return this.getRealPath(path).then((response)=> {
-      return this.readFile(response.path).then((content)=> {
-        response.content = content;
-        return response
-      });
-    });
-  }
-
-  readFile(path) {
-    if (fs.existsSync(path)) {
-      return reader.read(path);
-    }
-    return q.reject(new Error('File does not exist'));
-  }
-
-  getRealPath(path) {
-    // Check if path is absolute and return the absolute path
-    if (fs.isAbsolute(path)) {
-      return q.resolve({
-        type: 'absolute',
-        path: path
-      });
+    constructor() {
+        this.types = ['json', 'yaml', 'yml'];
+        this.globalFolder = fs.getHomeDirectory() + '/.ed/';
     }
 
-    // Check and if exists return the local path
-    let localPath = this.getLocalFolder();
-    if (fs.existsSync(localPath + '/' + path)){
-      return q.resolve({
-        type: 'local',
-        path: fs.absolute(localPath) + '/' + path
-      })
+    /**
+     * Load a file given the file's path
+     *
+     * @param path
+     * @returns {*}
+     */
+    loadFile(path) {
+        return this.getRealPath(path).then((response)=> {
+            return this.readFile(response.path).then((content)=> {
+                response.content = content;
+                return response
+            });
+        });
     }
 
-    if (fs.existsSync(this.globalFolder + '/' + path)){
-      return q.resolve({
-        type: 'global',
-        path: this.globalFolder + '/' + path
-      });
-    }
-    return q.reject(new Error('File not found'));
-
-  }
-
-
-  getLocalFolder(targetFile, startingPoint, levels) {
-
-    if (!targetFile) {
-      targetFile = '.ed'
+    readFile(path) {
+        if (fs.existsSync(path)) {
+            return reader.read(path);
+        }
+        return q.reject(new Error('File does not exist'));
     }
 
-    if (!startingPoint) {
-      startingPoint = './';
+    /**
+     * Get the real path to the file specified
+     *
+     * @param path
+     * @returns {*}
+     */
+    getRealPath(path) {
+        // Check if path is absolute and return the absolute path
+        if (fs.isAbsolute(path)) {
+            return q.resolve({
+                type: 'absolute',
+                path: path
+            });
+        }
+
+        // Check and if exists return the local path
+        let localFolder = this.getLocalFolder();
+
+        if (localFolder) {
+            let localFilePath = this.fileExists(localFolder + '/' + path, this.types);
+
+            if (localFilePath) {
+                return q.resolve({
+                    type: 'local',
+                    path: fs.absolute(localFilePath)
+                });
+            }
+        }
+
+        let globalFilePath = this.fileExists(this.globalFolder + '/' + path, this.types);
+
+        if (globalFilePath) {
+            return q.resolve({
+                type: 'local',
+                path: globalFilePath
+            });
+        }
+
+        return q.reject(new Error('File not found'));
     }
 
-    if (!levels) {
-      levels = fs.absolute(startingPoint).split('/').length;
+    /**
+     * Check if file exists and returns the path
+     *
+     * @param path
+     * @param possibleExtensions
+     * @returns {*}
+     */
+    fileExists(path, possibleExtensions) {
+        if (fs.existsSync(path)) {
+            return path;
+        }
 
-      //Checks if a windows machines
-      if (levels == 1) {
-        levels = fs.absolute(startingPoint).split('\\').length;
-      }
+        if (!_.isUndefined(possibleExtensions)) {
+            for(var i = 0; i < possibleExtensions.length; i++){
+                if (this.fileExists(path + '.' + possibleExtensions[i])) {
+                    return path + '.' + possibleExtensions[i];
+                }
+            }
+        }
+
+        return false;
     }
 
-    if (fs.existsSync((startingPoint + '/' + targetFile))) {
-      return (startingPoint + '/' + targetFile).replace('//', '/');
-    }
+    /**
+     * Get the local .edd folder
+     *
+     * @param targetFile
+     * @param startingPoint
+     * @param levels
+     * @returns {*}
+     */
+    getLocalFolder(targetFile, startingPoint, levels) {
+        if (!targetFile) {
+            targetFile = '.edd'
+        }
 
-    if ((levels - 1) != 0) {
-      return this.getLocalFolder(targetFile, startingPoint + '../', (levels - 1));
-    }
+        if (!startingPoint) {
+            startingPoint = './';
+        }
 
-    return false;
-  }
+        if (!levels) {
+            levels = fs.absolute(startingPoint).split('/').length;
+
+            //Checks if a windows machines
+            if (levels == 1) {
+                levels = fs.absolute(startingPoint).split('\\').length;
+            }
+        }
+
+        if (fs.existsSync((startingPoint + '/' + targetFile))) {
+            return (startingPoint + '/' + targetFile).replace('//', '/');
+        }
+
+        if ((levels - 1) != 0) {
+            return this.getLocalFolder(targetFile, startingPoint + '../', (levels - 1));
+        }
+
+        return false;
+    }
 }
 
 module.exports = new Loader;
