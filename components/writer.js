@@ -14,7 +14,7 @@ var writeFile = function (file_path, content) {
   if (typeof content == 'object') {
     content = JSON.stringify(content);
   }
-  
+
   fs.writeFile(file_path, content, function (err) {
     if (err) {
       defered.reject(new Error(err));
@@ -24,6 +24,7 @@ var writeFile = function (file_path, content) {
   });
   return defered.promise;
 };
+
 
 var askToOverwrite = function () {
   var question = {

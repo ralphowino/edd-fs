@@ -1,7 +1,7 @@
 var _ = require('lodash'),
   manager = {},
   writer = require('./writer'),
-  io = require('../../io'),
+  io = require('../../eddie-io'),
   reader = require('./reader');
 
 
