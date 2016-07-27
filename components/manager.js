@@ -28,4 +28,4 @@ manager.init = function () {
 };
 
 
-exports = module.exports = manager;
+exports.manager = manager;
