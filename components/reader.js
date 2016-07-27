@@ -36,7 +36,7 @@ var parse = {
 exports.read = function (path) {
   var type = resolveFileType(path);
   var defered = q.defer();
-  Loader.readFile(path, function (err, data) {
+  fs.readFile(path, function (err, data) {
     if (err) {
       defered.reject(new Error(err));
     } else {

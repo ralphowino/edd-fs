@@ -14,4 +14,7 @@ function init() {
   writeCmd.init();
 }
 
-exports = module.exports = _.merge(writer, reader, manager,loader, {init: init});
+module.exports = _.assign(writer, reader, manager, {init: init});
+module.exports.loader = loader;
+
+
