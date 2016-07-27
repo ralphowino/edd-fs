@@ -37,22 +37,20 @@ class Loader {
 
     // Check and if exists return the local path
     let localPath = this.getLocalFolder();
-
-    fs.exists(localPath + '/' + path, () => {
+    if (fs.existsSync(localPath + '/' + path)){
       return q.resolve({
         type: 'local',
         path: fs.absolute(localPath) + '/' + path
       })
-    }, (err) => {
-      fs.exists(this.globalFolder + '/' + path, () => {
-        return q.resolve({
-          type: 'global',
-          path: this.globalFolder + '/' + path
-        });
-      }, (err) => {
-        return q.reject(new Error('File not found'));
-      })
-    });
+    }
+
+    if (fs.existsSync(this.globalFolder + '/' + path)){
+      return q.resolve({
+        type: 'global',
+        path: this.globalFolder + '/' + path
+      });
+    }
+    return q.reject(new Error('File not found'));
 
   }
 
