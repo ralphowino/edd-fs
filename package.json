@@ -1,8 +1,16 @@
 {
   "name": "eddie-fs",
-  "version": "0.1.0",
-  "description": "File system module built for the Eddie application",
+  "version": "1.0.0",
+  "description": "A file system module for the Eddie Application",
   "main": "index.js",
+  "dependencies": {
+    "fs-plus": "^2.9.1",
+    "inquirer": "^1.1.2",
+    "js-yaml": "^3.6.1",
+    "lodash": "^4.14.0",
+    "prompt": "^1.0.0"
+  },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,11 +19,10 @@
     "url": "git+https://github.com/ralphowino/eddie-fs.git"
   },
   "keywords": [
-    "eddie",
-    "eddie-fs"
+    "eddie"
   ],
-  "author": "Samuel Kubai <sam@ralphowino.com> (http://ralphowino.com)",
-  "license": "MIT",
+  "author": "RalphOwino",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/ralphowino/eddie-fs/issues"
   },

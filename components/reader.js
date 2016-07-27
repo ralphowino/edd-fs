@@ -1,8 +1,9 @@
 'use strict';
 
-var fs = require('fs-plus'),
-  yaml = require('js-yaml'),
-  _ = require('lodash');
+var fs = require('fs-plus');
+var  q = require('q');
+var  yaml = require('js-yaml');
+var  _ = require('lodash');
 
 var types = {
   json: ['json'],
@@ -19,30 +20,32 @@ var resolveFileType = function (fileName) {
   return ext;
 };
 
-var rawRead = function (path) {
-  return fs.readFileSync(path);
-};
-
-var readYaml = function (data) {
+var parseYaml = function (data) {
   return yaml.safeLoad(data);
 };
 
-var readJson = function (data) {
+var parseJson = function (data) {
   return JSON.parse(data);
 };
 
 var parse = {
-  json: readJson,
-  yaml: readYaml
+  json: parseJson,
+  yaml: parseYaml
 };
 
 exports.read = function (path) {
   var type = resolveFileType(path);
-  var content = rawRead(path).toString();
-  if (typeof parse[type] == 'function') {
-    return parse[type](content);
-  }
-  return content;
+  var defered = q.defer();
+  fs.readFile(path, function (err, data) {
+    if (err) {
+      defered.reject(new Error(err));
+    } else {
+      if (typeof parse[type] == 'function') {
+        defered.resolve(parse[type](data));
+      } else {
+        defered.resolve(data.toString());
+      }
+    }
+  });
+  return defered.promise;
 };
-
-

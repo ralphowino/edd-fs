@@ -1,10 +1,9 @@
 var program = require('commander'),
-  io = require('../../eddie-io'),
-  manager = require('../components/manager'),
   q = require('q'),
   fs = require('fs-plus'),
-  reader = require('../components/reader');
-  loader = require('../components/loader');
+  reader = require('../components/reader'),
+  loader = require('../components/loader'),
+  copy = require('../components/copy');
 
 var command = {};
 command.init = init;
@@ -23,7 +22,7 @@ function init() {
 
 function handle(path) {
   "use strict";
-
+  //
   // if (path == undefined) {
   //   throw new Error('Required argument `path` not provided');
   // }
@@ -34,8 +33,16 @@ function handle(path) {
   // }
   //
   // console.log(reader.read(path));
-  console.log(loader.loadFile(path));
-
+  loader.loadFile(path).then(function (response) {
+    console.log(response);
+  }, function (err) {
+    console.log(err);
+  });
+  // copy.copyFile(path).then(function (response) {
+  //   console.log(response);
+  // }, function (err) {
+  //   console.log(err)
+  // });
 }
 
 

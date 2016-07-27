@@ -16,7 +16,7 @@ function init() {
     .description('Initialize a new eddie instance')
     .option('-f, --force', 'Force re-initialization if already existing')
     .action(command.handle);
-};
+}
 
 function handle() {
   "use strict";
