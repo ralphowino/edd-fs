@@ -11,7 +11,11 @@ var writeFile = function (file_path, content) {
     fs.makeTreeSync(dir);
   }
 
-  fs.writeFile(file_path, content.toString(), function (err) {
+  if (typeof content == 'object') {
+    content = JSON.stringify(content);
+  }
+  
+  fs.writeFile(file_path, content, function (err) {
     if (err) {
       defered.reject(new Error(err));
     } else {
