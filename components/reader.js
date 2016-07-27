@@ -1,9 +1,10 @@
 'use strict';
 
 var fs = require('fs-plus');
-var  q = require('q');
-var  yaml = require('js-yaml');
-var  _ = require('lodash');
+var path = require('path');
+var q = require('q');
+var yaml = require('js-yaml');
+var _ = require('lodash');
 
 var types = {
   json: ['json'],
@@ -11,7 +12,7 @@ var types = {
 };
 
 var resolveFileType = function (fileName) {
-  var ext = fileName.substr(fileName.lastIndexOf('.') + 1);
+  var ext = path.extname(fileName).substr(1);
   for (var type in types) {
     if (_.includes(types[type], ext)) {
       return type;

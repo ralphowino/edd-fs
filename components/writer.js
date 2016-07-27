@@ -1,6 +1,8 @@
 'use strict';
 
-var q = require('q'),
+var
+  _ = require('lodash'),
+  q = require('q'),
   inquirer = require('inquirer'),
   path = require('path'),
   fs = require('fs-plus');
@@ -13,7 +15,10 @@ var writeFile = function (file_path, content) {
     fs.makeTreeSync(dir);
   }
 
-  fs.writeFile(file_path, JSON.stringify(content), function (err) {
+  if (_.isObject(content) || _.isArray(content)) {
+    content = JSON.stringify(content)
+  }
+  fs.writeFile(file_path, content, function (err) {
     if (err) {
       defered.reject(new Error(err));
     } else {
