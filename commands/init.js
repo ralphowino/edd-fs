@@ -1,3 +1,5 @@
+'use strict';
+
 var program = require('commander'),
   io = require('../../eddie-io'),
   manager = require('../components/manager'),

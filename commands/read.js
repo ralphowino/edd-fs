@@ -1,3 +1,5 @@
+'use strict';
+
 var program = require('commander'),
   q = require('q'),
   fs = require('fs-plus'),

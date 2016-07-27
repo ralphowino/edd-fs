@@ -1,3 +1,5 @@
+'use strict';
+
 var q = require('q'),
   inquirer = require('inquirer'),
   path = require('path'),

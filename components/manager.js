@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash'),
   manager = {},
   writer = require('./writer'),
