@@ -15,7 +15,7 @@ module.exports = command;
 function init() {
   program
     .command('init')
-    .description('Initialize a new eddie instance')
+    .description('Initialize a new edd instance')
     .option('-f, --force', 'Force re-initialization if already existing')
     .action(command.handle);
 }
@@ -23,9 +23,8 @@ function init() {
 function handle() {
   "use strict";
   var overwrite = program.force;
-
   if (fs.existsSync(manager.eddiePath)) {
-    overwrite = io.confirm('eddie is already initialized, do you want to re-initialize it');
+    overwrite = io.confirm('edd is already initialized, do you want to re-initialize it', false);
     q.resolve(overwrite).then(function (force) {
       if (force) {
         manager.init(force);

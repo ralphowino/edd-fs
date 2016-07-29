@@ -1,7 +1,7 @@
 {
-  "name": "eddie-fs",
+  "name": "edd-fs",
   "version": "1.0.0",
-  "description": "A file system module for the Eddie Application",
+  "description": "A file system module for the edd Application",
   "main": "index.js",
   "dependencies": {
     "fs-plus": "^2.9.1",
@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ralphowino/eddie-fs.git"
+    "url": "git+https://github.com/ralphowino/edd-fs.git"
   },
   "keywords": [
-    "eddie"
+    "edd"
   ],
   "author": "RalphOwino",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ralphowino/eddie-fs/issues"
+    "url": "https://github.com/ralphowino/edd-fs/issues"
   },
-  "homepage": "https://github.com/ralphowino/eddie-fs#readme"
+  "homepage": "https://github.com/ralphowino/edd-fs#readme"
 }
