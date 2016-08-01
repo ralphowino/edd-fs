@@ -3,12 +3,12 @@
 var _ = require('lodash'),
   manager = {},
   writer = require('./writer'),
-  io = require('../../eddie-io'),
+  io = require('../../edd-io'),
   reader = require('./reader');
 
 
 manager.basePath = process.cwd() + '/';
-manager.eddiePath = manager.basePath.concat('.ed/');
+manager.eddiePath = manager.basePath.concat('.edd/');
 manager.eddieFile = manager.eddiePath.concat('ed-config.js');
 
 manager.init = function () {

@@ -8,7 +8,7 @@ var reader = require('./reader');
 class Loader {
     constructor() {
         this.types = ['json', 'yaml', 'yml'];
-        this.globalFolder = fs.getHomeDirectory() + '/.ed/';
+        this.globalFolder = fs.getHomeDirectory() + '/.edd/';
     }
 
     /**

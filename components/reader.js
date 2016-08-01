@@ -22,11 +22,11 @@ var resolveFileType = function (fileName) {
 };
 
 var parseYaml = function (data) {
-  return yaml.safeLoad(data);
+  return JSON.stringify((yaml.safeLoad(data)));
 };
 
 var parseJson = function (data) {
-  return JSON.parse(data);
+  return JSON.stringify((JSON.parse(data)));
 };
 
 var parse = {

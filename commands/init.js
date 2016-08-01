@@ -1,7 +1,7 @@
 'use strict';
 
 var program = require('commander'),
-  io = require('../../eddie-io'),
+  io = require('../../edd-io'),
   manager = require('../components/manager'),
   q = require('q'),
   fs = require('fs-plus');
