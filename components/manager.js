@@ -1,31 +1,43 @@
 'use strict';
 
 var _ = require('lodash'),
-  manager = {},
   writer = require('./writer'),
+  q = require('q'),
   io = require('../../edd-io'),
   reader = require('./reader');
 
+class Manager {
+  constructor() {
+    this.basePath = process.cwd() + '/';
+    this.eddiePath = this.basePath.concat('.edd/');
+    this.eddieFile = this.eddiePath.concat('edd-config.json');
+  }
 
-manager.basePath = process.cwd() + '/';
-manager.eddiePath = manager.basePath.concat('.edd/');
-manager.eddieFile = manager.eddiePath.concat('ed-config.js');
-
-manager.init = function () {
-  "use strict";
-  io.info('initializing');
-  var config = {version: '0.0.1'};
-  writer
-    .write(manager.eddieFile, JSON.stringify(config))
-    .then(function () {
-        io.success('eddie successfully initialized at' + manager.eddieFile);
-        writer.mkdir(manager.eddiePath.concat('/libraries'));
-        writer.mkdir(manager.eddiePath.concat('/templates'));
-      },
-      function (err) {
-        io.error(err);
-      });
-};
+  init() {
+    "use strict";
+    io.output.info('initializing');
+    var config = {version: '0.0.1'};
 
 
-exports.manager = manager;
+    return writer
+      .write(this.eddieFile, JSON.stringify(config))
+      .then((file)=> {
+          let process = [];
+          io.output.success('edd successfully initialized at' + file);
+
+          process.push(writer.mkdir(this.eddiePath.concat('libraries')).then(()=> {
+            io.output.success('Created libraries folder')
+          }, ()=> {
+            console.log(arguments)
+          }));
+          process.push(writer.mkdir(this.eddiePath.concat('templates')));
+
+          return q.all(process);
+        },
+        (err) => {
+          io.output.error(err);
+        });
+  }
+}
+
+module.exports = new Manager;

@@ -7,7 +7,6 @@ var
   path = require('path'),
   fs = require('fs-plus');
 
-
 var writeFile = function (file_path, content) {
   var defered = q.defer();
   var dir = path.dirname(file_path);
@@ -20,10 +19,9 @@ var writeFile = function (file_path, content) {
   }
   fs.writeFile(file_path, content, function (err) {
     if (err) {
-      defered.reject(new Error(err));
-    } else {
-      defered.resolve();
+      return defered.reject(new Error(err));
     }
+    defered.fulfill(file_path);
   });
   return defered.promise;
 };
@@ -40,7 +38,6 @@ var askToOverwrite = function () {
 };
 
 module.exports.write = function (path, content) {
-  var defered = q.defer();
   if (!fs.existsSync(path)) {
     return writeFile(path, content);
   }
@@ -49,16 +46,13 @@ module.exports.write = function (path, content) {
     if (response.overwrite) {
       return writeFile(path, content);
     }
-    defered.reject();
-    return defered.promise;
+    return q.reject('File already exists');
   });
 };
 
 module.exports.mkdir = function (path) {
-  "use strict";
   var deferred = q.defer();
   fs.makeTree(path, function (err) {
-    "use strict";
     if (err) {
       return deferred.reject(err);
     }
