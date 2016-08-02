@@ -2,6 +2,7 @@
 
 var _ = require('lodash'),
   writer = require('./writer'),
+  q = require('q'),
   io = require('../../edd-io'),
   reader = require('./reader');
 
@@ -14,23 +15,27 @@ class Manager {
 
   init() {
     "use strict";
-    io.info('initializing');
+    io.output.info('initializing');
     var config = {version: '0.0.1'};
 
 
-    writer
+    return writer
       .write(this.eddieFile, JSON.stringify(config))
       .then((file)=> {
-          io.success('edd successfully initialized at' + file);
-          writer.mkdir(this.eddiePath.concat('libraries')).then(()=> {
-            io.success('Created libraries folder')
+          let process = [];
+          io.output.success('edd successfully initialized at' + file);
+
+          process.push(writer.mkdir(this.eddiePath.concat('libraries')).then(()=> {
+            io.output.success('Created libraries folder')
           }, ()=> {
             console.log(arguments)
-          });
-          writer.mkdir(this.eddiePath.concat('templates'));
+          }));
+          process.push(writer.mkdir(this.eddiePath.concat('templates')));
+
+          return q.all(process);
         },
         (err) => {
-          io.error(err);
+          io.output.error(err);
         });
   }
 }
