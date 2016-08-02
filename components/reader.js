@@ -22,7 +22,7 @@ var resolveFileType = function (fileName) {
 };
 
 var parseYaml = function (data) {
-  return yaml.safeLoad(data);
+  return yaml.load(data);
 };
 
 var parseJson = function (data) {
