@@ -22,11 +22,11 @@ var resolveFileType = function (fileName) {
 };
 
 var parseYaml = function (data) {
-  return JSON.stringify((yaml.safeLoad(data)));
+  return yaml.safeLoad(data);
 };
 
 var parseJson = function (data) {
-  return JSON.stringify((JSON.parse(data)));
+  return JSON.parse(data);
 };
 
 var parse = {
@@ -37,14 +37,15 @@ var parse = {
 exports.read = function (path) {
   var type = resolveFileType(path);
   var defered = q.defer();
-  fs.readFile(path, function (err, data) {
+  fs.readFile(path, function (err, content) {
+    let data = content.toString();
     if (err) {
       defered.reject(new Error(err));
     } else {
       if (typeof parse[type] == 'function') {
         defered.resolve(parse[type](data));
       } else {
-        defered.resolve(data.toString());
+        defered.resolve(data);
       }
     }
   });
