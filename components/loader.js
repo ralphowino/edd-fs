@@ -25,6 +25,20 @@ class Loader {
             });
         });
     }
+    /**
+     * Load a file given the file's path
+     *
+     * @param path
+     * @returns {*}
+     */
+    loadFileSync(path) {
+        return this.getRealPath(path).then((response)=> {
+            return this.readFile(response.path).then((content)=> {
+                response.content = content;
+                return response
+            });
+        });
+    }
 
     readFile(path) {
         if (fs.existsSync(path)) {
