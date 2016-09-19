@@ -1,11 +1,9 @@
-'use strict';
-
 var q = require('q');
 var fs = require('fs-plus');
-var reader = require('./../reader');
-var writer = require('./../writer');
+import {Reader} from './reader';
+import {Writer} from './writer';
 
-class FileSystem {
+class ClassFileSystem {
 
     constructor() {
         this.globalFolder = fs.getHomeDirectory() + '/.edd/';
@@ -21,7 +19,7 @@ class FileSystem {
     writeToLocalFile(path, content) {
         var deferred = q.defer();
 
-        writer.write(this.getLocalFolder() + '/' + path, content).then( () => {
+        Writer.write(this.getLocalFolder() + '/' + path, content).then( () => {
             return deferred.resolve('Successfully wrote to the file');
         },  (err) => {
             return deferred.reject(err);
@@ -40,7 +38,7 @@ class FileSystem {
         var deferred = q.defer();
 
         fs.exists(path, () => {
-            reader.read(path).then( (response) => {
+            Reader.read(path).then( (response) => {
                 return deferred.resolve(response);
             },  (err) => {
                 return deferred.reject(err);
@@ -150,5 +148,4 @@ class FileSystem {
         }
     }
 }
-
-module.exports = new FileSystem;
+export let FileSystem = new ClassFileSystem();

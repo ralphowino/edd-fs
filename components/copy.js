@@ -1,12 +1,9 @@
-'use strict';
-
 var q = require('q');
-var _ = require('lodash');
 var fs = require('fs-plus');
-var loader = require('./loader');
-var file = require('./Filesystem/index');
 
-class Copier {
+import {FileSystem} from './filesystem';
+
+class ClassCopier {
     /**
      * Checks if a local version of the file exists and returns the file's contents
      *
@@ -16,15 +13,14 @@ class Copier {
     checkLocalVersion(path) {
         let deferred = q.defer();
 
-        file.readLocalFile(path).then((fileContent) => {
-            return deferred.resolve(file.buildResponse('local', path, fileContent))
+        FileSystem.readLocalFile(path).then((fileContent) => {
+            return deferred.resolve(FileSystem.buildResponse('local', path, fileContent))
         }, (err) => {
             return deferred.reject(err);
         });
 
         return deferred.promise;
     }
-
 
 
     /**
@@ -73,8 +69,8 @@ class Copier {
     copyFile(path) {
         let deferred = q.defer();
 
-        if(!file.localDirectoryExists()){
-            return  deferred.reject(new Error('Local .edd folder does not exist.'));
+        if (!file.localDirectoryExists()) {
+            return deferred.reject(new Error('Local .edd folder does not exist.'));
         }
 
         this.checkLocalVersion(path).then((response) => {
@@ -83,10 +79,10 @@ class Copier {
             this.fetchGlobalVersion(path).then((content) => {
                 this.createLocalVersion(path, content).then((response) => {
                     return deferred.resolve(response);
-                },  (err) => {
+                }, (err) => {
                     return deferred.reject(err);
                 })
-            },  (err) => {
+            }, (err) => {
                 return deferred.reject(err);
             });
         });
@@ -94,5 +90,4 @@ class Copier {
         return deferred.promise;
     }
 }
-
-module.exports = new Copier;
+export  let Copier = new ClassCopier();

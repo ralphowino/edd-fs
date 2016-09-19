@@ -1,11 +1,10 @@
-'use strict';
-
 var q = require('q');
 var _ = require('lodash');
 var fs = require('fs-plus');
-var reader = require('./reader');
 
-class Loader {
+import {Reader} from './reader';
+
+class ClassLoader {
     constructor() {
         this.types = ['json', 'yaml', 'yml'];
         this.globalFolder = fs.getHomeDirectory() + '/.edd/';
@@ -25,6 +24,7 @@ class Loader {
             });
         });
     }
+
     /**
      * Load a file given the file's path
      *
@@ -42,7 +42,7 @@ class Loader {
 
     readFile(path) {
         if (fs.existsSync(path)) {
-            return reader.read(path);
+            return Reader.read(path);
         }
         return q.reject(new Error('File does not exist'));
     }
@@ -101,7 +101,7 @@ class Loader {
         }
 
         if (!_.isUndefined(possibleExtensions)) {
-            for(var i = 0; i < possibleExtensions.length; i++){
+            for (var i = 0; i < possibleExtensions.length; i++) {
                 if (this.fileExists(path + '.' + possibleExtensions[i])) {
                     return path + '.' + possibleExtensions[i];
                 }
@@ -149,7 +149,5 @@ class Loader {
     }
 }
 
-module.exports = new Loader;
-
-
+export let Loader = new ClassLoader();
 

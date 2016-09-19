@@ -1,21 +1,17 @@
-var _ = require('lodash'),
-  initCmd = require('./commands/init'),
-  readCmd = require('./commands/read'),
-  writeCmd = require('./commands/write'),
-  writer = require('./components/writer'),
-  loader = require('./components/loader'),
-  manager = require('./components/manager'),
-  reader = require('./components/reader');
+export {Writer} from './components/writer';
+export {Loader} from './components/loader';
+export {Reader} from './components/reader';
+export {Manager} from './components/manager';
+export {FileSystem} from './components/filesystem';
 
-function init() {
-  "use strict";
-  initCmd.init();
-  readCmd.init();
-  writeCmd.init();
+import {CommandInit} from './commands/init';
+import {CommandRead} from './commands/read';
+import {CommandWrite} from './commands/write';
+
+export function init() {
+  CommandInit.init();
+  CommandRead.init();
+  CommandWrite.init();
 }
-
-module.exports = _.assign(writer, manager, {init: init});
-module.exports.loader = loader;
-module.exports.reader = reader;
 
 

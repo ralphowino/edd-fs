@@ -1,43 +1,37 @@
-'use strict';
+var q = require('q');
 
-var _ = require('lodash'),
-  writer = require('./writer'),
-  q = require('q'),
-  io = require('../../edd-io'),
-  reader = require('./reader');
+import {Output} from '../../edd-io/index';
+import {Writer} from './writer';
 
-class Manager {
-  constructor() {
-    this.basePath = process.cwd() + '/';
-    this.eddiePath = this.basePath.concat('.edd/');
-    this.eddieFile = this.eddiePath.concat('edd-config.json');
-  }
+class ClassManager {
+    constructor() {
+        this.basePath = process.cwd() + '/';
+        this.eddiePath = this.basePath.concat('.edd/');
+        this.eddieFile = this.eddiePath.concat('edd-config.json');
+    }
 
-  init() {
-    "use strict";
-    io.output.info('initializing');
-    var config = {version: '0.0.1'};
+    init() {
+        Output.info('initializing');
+        var config = {version: '0.0.1'};
 
+        return Writer
+            .write(this.eddieFile, JSON.stringify(config))
+            .then((file)=> {
+                    let process = [];
+                    Output.success('edd successfully initialized at' + file);
 
-    return writer
-      .write(this.eddieFile, JSON.stringify(config))
-      .then((file)=> {
-          let process = [];
-          io.output.success('edd successfully initialized at' + file);
+                    process.push(Writer.mkdir(this.eddiePath.concat('libraries')).then(()=> {
+                        Output.success('Created libraries folder')
+                    }, ()=> {
+                        console.log(arguments)
+                    }));
+                    process.push(Writer.mkdir(this.eddiePath.concat('templates')));
 
-          process.push(writer.mkdir(this.eddiePath.concat('libraries')).then(()=> {
-            io.output.success('Created libraries folder')
-          }, ()=> {
-            console.log(arguments)
-          }));
-          process.push(writer.mkdir(this.eddiePath.concat('templates')));
-
-          return q.all(process);
-        },
-        (err) => {
-          io.output.error(err);
-        });
-  }
+                    return q.all(process);
+                },
+                (err) => {
+                    Output.error(err);
+                });
+    }
 }
-
-module.exports = new Manager;
+export let Manager = new ClassManager();

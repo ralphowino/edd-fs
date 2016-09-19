@@ -1,12 +1,10 @@
-'use strict';
+let fs = require('fs-plus'),
+    path = require('path'),
+    q = require('q'),
+    yaml = require('js-yaml'),
+    _ = require('lodash');
 
-let fs = require('fs-plus');
-let path = require('path');
-let q = require('q');
-let yaml = require('js-yaml');
-let _ = require('lodash');
-
-class Reader {
+class ClassReader {
 
   constructor() {
     this.types = {
@@ -63,5 +61,4 @@ class Reader {
     return data;
   }
 }
-
-module.exports = new Reader();
+export let Reader = new ClassReader();
